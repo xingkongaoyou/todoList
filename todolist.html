@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Todolist</title>
+    <style>
+        #app{
+            position:relative;
+            border:2px solid deepskyblue;
+        }
+        table{
+            border-collapse:collapse;
+            border:1px solid green;
+            width: 200px;
+        }
+        td,th{
+            border:1px solid green;
+            text-align:center;
+        }
+        button{
+            background-color: red;
+            border:1px solid yellow;
+        }
+        .box{
+            position:absolute;
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
+            background-color: rgba(0,0,0,.8);
+        }
+        .box .box-sel{
+            margin:20px auto;
+            text-align:center;
+            color:red;
+
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div style="text-align:right">
+        name: <input v-model="username" type="text"> <br>
+        age: <input v-model="age" type="number"> <br>
+        <input style="margin-right:10px" @click="addData" value="添加" type="button">
+    </div>
+    <div>
+        <table style="margin-left:10px">
+            <tr>
+                <th>序号</th>
+                <th>姓名</th>
+                <th>年龄</th>
+                <th>操作</th>
+            </tr>
+            <tr v-for="(item,index) in mydata">
+                <td>{{index+1}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.age}}</td>
+                <td>
+                    <button @click="beforeDele(index)">删除</button>
+                </td>
+            </tr>
+            <tr v-show="mydata.length==0">
+                <td colspan="4">
+                    暂无数据......
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!--模态框-->
+    <div v-show="showBox" class="box">
+        <div class="box-sel">
+            <span>确定要删除吗？</span>
+            <button @click="showBox=false">取消</button>
+            <button @click="sureDele">确定</button>
+        </div>
+    </div>
+</div>
+</body>
+<script src="./vue.js"></script>
+<script>
+    new Vue({
+        el:"#app",
+        data:{
+            msg:"hello",
+            showBox:false,
+            username:"",
+            age:"",
+            nowIndex:-100,
+            mydata:[{name:"张三",age:"18"}]
+        },
+        methods:{
+           addData:function(){
+               if(this.username==""||this.age==""){
+                   alert("请添加数据");
+               }else{
+                   this.mydata.push({name:this.username,age:this.age});
+                   this.username="";
+                   this.age="";
+               }
+           },
+            beforeDele:function(index){
+                this.showBox=true;
+                this.nowIndex=index;
+            },
+            sureDele:function(){
+                this.mydata.splice(this.nowIndex,1);
+                this.showBox=false
+            }
+        }
+    })
+</script>
+</html>
